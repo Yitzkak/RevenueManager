@@ -1,0 +1,67 @@
+@import "./../base";
+
+.app-flex-container {
+  display: flex;
+  flex-direction: column;
+  font-family: $fontStack;
+}
+
+header {
+  background-color: $majorColor;
+  width: 100%;
+  text-align: center;
+  padding: 1%;
+  color: white;
+  font-size: 22px;
+}
+
+.revenue-manager-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.controls-container {
+  display: flex;
+  background-color: #666666;
+  height: 568px;
+  box-sizing: border-box;
+  /*flex-grow: 2;*/
+  width: 42%;
+  padding: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.display-area-container {
+  height: 568px;
+  flex-grow: 10;
+}
+
+form {
+  width: 80%;
+  text-align: center;
+  padding: 2px;
+}
+
+input[type="text"] {
+  width: 95%;
+  padding: 3.5% 10px;
+  border: 0px;
+  border-radius: 2px;
+  margin: 3% 0;
+  box-sizing: border-box;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: $fontStack;
+}
+
+button {
+  font-family: $fontStack;
+  background-color: $majorColor;
+  border: none;
+  padding: 15px 50px;
+  color: white;
+  text-align: center;
+  font-size: 15px;
+  border-radius: 4px;
+}

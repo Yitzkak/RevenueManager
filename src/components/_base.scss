@@ -1,0 +1,32 @@
+$majorColor: #fa4251;
+$fontStack: "Liu Jian Mao Cao", cursive;
+
+* {
+  box-sizing: border-box;
+}
+
+table {
+  width: 100%;
+  color: #fff;
+  border-collapse: collapse;
+}
+
+th {
+  background-color: #666;
+  font-size: 12px;
+  line-height: 1.4;
+  text-transform: uppercase;
+  padding: 20px 5px;
+}
+
+td {
+  color: #333;
+  text-align: center;
+  padding: 7px;
+}
+
+tfoot {
+  th {
+    padding: 4px;
+  }
+}
