@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AddForm from "./AddForm";
-import FilterExpenses from "./FilterExpenses";
+import moment from "moment";
 
 const AddExpenses = ({ addExpenses, expenseEditItem }) => {
   const [expenses, setExpenses] = useState(expenseEditItem);
@@ -9,27 +9,12 @@ const AddExpenses = ({ addExpenses, expenseEditItem }) => {
     setExpenses(expenseEditItem);
   }, [expenseEditItem]);
 
-  /*const [expenses, setExpenses] = useState({
-    amount: "",
-    description: "",
-    date: "",
-  });*/
-
-  const [view, setView] = useState(false);
-
-  // Use this state to implement mouse hover change on icons
-  // Icons for switching between query fields and add expenses
-  const [iconColor, setIconColor] = useState({
-    iconColor1: "#ecd005",
-    iconColor2: "#ecd005",
-  });
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const currentDate = new Date();
+    let todaysDate = moment().format("YYYY-MM-DD");
 
     //if the date input field is empty use today's date
-    expenses.date == "" && (expenses.date = currentDate.toLocaleDateString());
+    expenses.date === "" && (expenses.date = todaysDate);
     addExpenses(expenses);
 
     // Clear state to clear input fields
@@ -38,21 +23,19 @@ const AddExpenses = ({ addExpenses, expenseEditItem }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    console.log("This is target name:", e.target.name);
     setExpenses({ ...expenses, [name]: value });
   };
 
   return (
     <React.Fragment>
       <div className="form-container">
-        {!view ? (
-          <AddForm
-            expenses={expenses}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-          />
-        ) : (
-          <FilterExpenses />
-        )}
+        <AddForm
+          expenses={expenses}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+        />
       </div>
     </React.Fragment>
   );

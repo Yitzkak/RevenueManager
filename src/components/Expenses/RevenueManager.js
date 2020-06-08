@@ -1,10 +1,8 @@
-import React, { useRef } from "react";
-import AddExpenses from "./AddExpenses";
+import React from "react";
 import DisplayExpenses from "./DisplayExpenses";
-import AddEditContainerArea from "./AddEditContainerArea";
-
+import AddEditContainerArea from "./AddFIlterContainerArea";
 import { v4 as uuidv4 } from "uuid";
-import { Login, List } from "./../../Icons";
+import moment from "moment"
 
 import "./style.scss";
 
@@ -14,10 +12,14 @@ class RevenueManager extends React.Component {
     super(props);
     this.state = {
       expenses: [
-        { id: 1, date: "13/04/2020", description: "Food", amount: "2000" },
-        { id: 2, date: "13/04/2020", description: "Cloth", amount: "1000" },
-        { id: 3, date: "13/04/2020", description: "Bench", amount: "20000" },
-        { id: 4, date: "13/04/2020", description: "Phone", amount: "25000" },
+        { id: 1, date: "2020-04-13", description: "Food", amount: "2000" },
+        { id: 2, date: "2020-04-13", description: "Cloth", amount: "1000" },
+        { id: 3, date: "2020-04-13", description: "Bench", amount: "20000" },
+        { id: 4, date: "2020-04-13", description: "Phone", amount: "25000" },
+        { id: 5, date: "2020-05-23", description: "Fuel", amount: "500" },
+        { id: 6, date: "2020-05-24", description: "gift", amount: "2500" },
+        { id: 7, date: "2020-03-12", description: "Data", amount: "1000" },
+        { id: 8, date: "2020-05-27", description: "Shoe", amount: "1000" },
       ],
       expenseEditItem: {
         amount: "",
@@ -31,8 +33,26 @@ class RevenueManager extends React.Component {
 
   //Add Expenses
   addExpenses = (expenses) => {
-    let newExpenses = [...this.state.expenses, { ...expenses, id: uuidv4() }];
-    this.setState({ expenses: newExpenses });
+    const { description, amount, date } = expenses;
+
+    //Check to see if the expense description is already in the database
+    //If so, add the amount else add the new entry
+    let expenseAlreadyExist = this.state.expenses.filter((expense) => {
+      return expense.description === description && expense.date === date;
+    });
+
+    if (!expenseAlreadyExist.length) {
+      let newExpenses = [...this.state.expenses, { ...expenses, id: uuidv4() }];
+      this.setState({ ...this.state, expenses: newExpenses });
+    } else {
+ 
+      let expenseID = expenseAlreadyExist[0].id
+      let updatedExpenses = this.state.expenses.map(expense=> {
+          const { id, date, description } = expense
+         return expense.id === expenseID ? {id, date, description, amount: parseInt(expense.amount) + parseInt(amount)}: expense
+      })
+      this.setState({ ...this.state, expenses: updatedExpenses })
+    }
   };
 
   // Delete Expenses
@@ -41,11 +61,19 @@ class RevenueManager extends React.Component {
       return expense.id !== filterId;
     });
 
-    this.setState({ ...this.state, expenses: newState });
+    this.setState(() => {
+      return {
+        ...this.state,
+        expenses: newState,
+      };
+    });
   };
 
   //Edit Expenses
   editExpenses = (id, amount, description, date) => {
+    this.setState((prevState) => {
+      return { ...this.state, filterOrAddView: prevState.filterOrAddView++ };
+    });
     // Remove that particular record from the table
     this.deleteExpenses(id);
 
@@ -59,9 +87,34 @@ class RevenueManager extends React.Component {
           date,
           isInEditMode: true,
         },
+        filterOrAddView: prevState.filterOrAddView++,
       };
     });
   };
+
+  //Filter Expenses
+  filterExpenses = (filterValue) =>{
+    let todaysDate = moment().format("YYYY");
+    console.log("Taa kwa:", todaysDate);
+    const {searchByDailyWeekly, searchByYear, searchByCategory} = filterValue;
+    const s1 = searchByYear;
+    const s2 = searchByDailyWeekly;
+    const s3 = searchByCategory;
+
+    switch (true) {
+      case (s1 !== "") && (s2 === "") && (s3 === ""): console.log("hey s1 here") 
+        break;
+      case (s1 !== "") && (s2 !== "") && (s3 === ""):  console.log("hey s1 here") 
+       
+        break;
+      case (s1 !== "") && (s2 !== "") && (s3 !== ""): 
+        console.log("hey s1 here") 
+        break;
+    
+      default:
+        break;
+    }
+  }
 
   render() {
     return (
@@ -69,7 +122,8 @@ class RevenueManager extends React.Component {
         <AddEditContainerArea
           addExpenses={this.addExpenses}
           expenseEditItem={this.state.expenseEditItem}
-          filterOrAddView={this.state.filterOrAddView++}
+          filterOrAddView={this.state.filterOrAddView}
+          filterExpenses = {this.filterExpenses}
         />
         <DisplayExpenses
           expenses={this.state.expenses}

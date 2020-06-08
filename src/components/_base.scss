@@ -8,10 +8,25 @@ $fontStack: "Liu Jian Mao Cao", cursive;
   list-style-type: none;
 }
 
-form {
-  width: 80%;
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5% 0px;
+  flex-direction: column;
   text-align: center;
-  padding: 2px;
+
+  .info-area {
+    width: 100%;
+    font-size: 13px;
+    padding: 5px;
+    color: #ff3c3c;
+  }
+
+  form {
+    width: 80%;
+    padding: 2px;
+  }
 }
 
 input[type="text"],

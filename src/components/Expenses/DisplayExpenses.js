@@ -1,7 +1,13 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
 
 const DisplayExpenses = ({ expenses, deleteExpenses, editExpenses }) => {
+  let todaysDate = moment().format("YYYY-MM-D");
+
+  //This is used to calculate the total expenses for each day
+  let todaysExpensesAmounts = [];
+
   return (
     <div className="display-area-container">
       <table>
@@ -15,38 +21,44 @@ const DisplayExpenses = ({ expenses, deleteExpenses, editExpenses }) => {
         </thead>
         <tbody>
           {expenses.length ? (
-            expenses.map((expense) => {
-              return (
-                <tr key={expense.id}>
-                  <td>{expense.date}</td>
-                  <td>{expense.description}</td>
-                  <td>{expense.amount}</td>
-                  <td>
-                    <ul>
-                      <li>
-                        <FontAwesomeIcon
-                          icon="pencil-alt"
-                          onClick={() =>
-                            editExpenses(
-                              expense.id,
-                              expense.amount,
-                              expense.description,
-                              expense.date
-                            )
-                          }
-                        />
-                      </li>
-                      <li>
-                        <FontAwesomeIcon
-                          icon="trash-alt"
-                          onClick={() => deleteExpenses(expense.id)}
-                        />
-                      </li>
-                    </ul>
-                  </td>
-                </tr>
-              );
-            })
+            expenses
+              .filter((expense) => {
+                return moment(todaysDate).isSame(expense.date);
+              })
+              .map((expense) => {
+                //This is used to hold the invidual expenses amount for each day
+                todaysExpensesAmounts.push(expense.amount);
+                return (
+                  <tr key={expense.id}>
+                    <td>{moment(expense.date).format("DD-MM-YYYY")}</td>
+                    <td>{expense.description}</td>
+                    <td>{expense.amount}</td>
+                    <td>
+                      <ul>
+                        <li>
+                          <FontAwesomeIcon
+                            icon="pencil-alt"
+                            onClick={() =>
+                              editExpenses(
+                                expense.id,
+                                expense.amount,
+                                expense.description,
+                                expense.date
+                              )
+                            }
+                          />
+                        </li>
+                        <li>
+                          <FontAwesomeIcon
+                            icon="trash-alt"
+                            onClick={() => deleteExpenses(expense.id)}
+                          />
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                );
+              })
           ) : (
             <tr>
               <td> No record(s) to display</td>
@@ -63,9 +75,9 @@ const DisplayExpenses = ({ expenses, deleteExpenses, editExpenses }) => {
             <td>Total:</td>
             <td></td>
             <td>
-              {expenses.length
-                ? expenses.reduce((total, num) => {
-                    return total + Number(num.amount);
+              {todaysExpensesAmounts.length
+                ? todaysExpensesAmounts.reduce((total, num) => {
+                    return total + Number(num);
                   }, 0)
                 : 0}
             </td>

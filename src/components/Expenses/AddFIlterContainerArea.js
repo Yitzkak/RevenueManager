@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import AddExpenses from "./AddExpenses";
-import EditContainer from "./EditContainer";
 import FilterExpenses from "./FilterExpenses";
 
-import { Login, List } from "./../../Icons";
 
-function AddEditContainerArea({
+import { Login, List } from "../../Icons";
+
+function AddFilterContainerArea({
   addExpenses,
   expenseEditItem,
   filterOrAddView,
+  filterExpenses
 }) {
   // filterOrAddView is always incremented in every render and passed in here
   // This is used to always set 'view' to true and always render 'AddExpenses'container
@@ -28,7 +29,6 @@ function AddEditContainerArea({
   });
 
   const iconBar = () => {
-    //var iconColors = "#ecd005";
     return (
       <div className="add-expenses-icons">
         <ul>
@@ -69,7 +69,6 @@ function AddEditContainerArea({
   return (
     <div className="controls-container">
       <div>{iconBar()}</div>
-      <div>{console.log("But this is view:", view)}</div>
       {view ? (
         <div>
           {
@@ -80,10 +79,10 @@ function AddEditContainerArea({
           }
         </div>
       ) : (
-        <FilterExpenses />
+        <FilterExpenses filterExpenses ={filterExpenses} />
       )}
     </div>
   );
 }
 
-export default AddEditContainerArea;
+export default AddFilterContainerArea;
